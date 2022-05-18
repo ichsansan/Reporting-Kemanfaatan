@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block head %}
+BAT Status
+{% endblock head %}
+
+{% block content %}
+<h1 class="py-2">Server Status</h1>
+
+
+{% for unit in data %}
+    <h5 class="pt-4">{{ unit }}</h5>
+    {% for key in data[unit] %}
+    <div class="row">
+        <div class="col-lg-4 pt-2">
+            <label for="{{key}}">{{key}}</label>
+        </div>
+        <div class="col-lg-4">
+            <div class="progress" id="{{key}}">
+                <div class="progress-bar bg-success" role="progressbar" style="width: {{data[unit][key]['Used']*100}}%" aria-valuenow="{{data[unit][key]['Used']*100}}" aria-valuemin="0" aria-valuemax="100">{{data[unit][key]['Used']*100}}</div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}    
+{% endfor %}
+
+{% endblock content %}

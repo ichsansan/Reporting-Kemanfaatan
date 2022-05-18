@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block head %}
+BAT Status
+{% endblock head %}
+
+{% block content %}
+<h1 class="py-2">BAT Status</h1>
+
+<ul class="nav nav-tabs justify-content-center nav-justified">
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+            aria-expanded="false">Tanjung Awar-Awar Unit 1</a>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">Sootblow Optimization</a></li>
+            <li><a class="dropdown-item" href="#">Combustion Optimization</a></li>
+        </ul>
+    </li>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+            aria-expanded="false">Tanjung Awar-Awar Unit 2</a>
+        <ul class="dropdown-menu">
+            <li><h6 class="dropdown-header">Boiler Auto Tuning</h6></li>
+            <li><a class="dropdown-item" href="#">Sootblow Optimization</a></li>
+            <li><a class="dropdown-item" href="#">Combustion Optimization</a></li>
+        </ul>
+    </li>
+</ul>
+
+<div class="justify-content-center">
+    <!-- <img src="/static/figure/Drawing TAW White v1.0.svg"> -->
+    <object data="/static/figure/Drawing TAW White v1.0.svg" width="100%" height="100%"> </object>
+</div>
+{% endblock content %}

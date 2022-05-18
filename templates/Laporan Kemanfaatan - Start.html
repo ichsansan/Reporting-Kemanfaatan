@@ -1,0 +1,196 @@
+{% extends 'base.html' %}
+{% block head %}
+Laporan Kemanfaatan BAT
+{% endblock head %}
+
+{% block content %}
+<h1 class="py-2">Laporan Kemanfaatan BAT</h1>
+
+<div class="row">
+    <div class="col-xl-3 pt-3">
+        <div class="card" style="height: 400px;">
+            <div class="card-body">
+                <form class="needs-validation" novalidate>
+                    <h6 class="pb-3">Cari</h6>
+                    <div class="form-floating mb-3">
+                        <select class="form-select" id="unitName" name="unitName"
+                            aria-label="Floating label select example">
+                            <option selected disabled>Pilih unit ...</option>
+                            <option value="tja1">Tanjung Awar-Awar Unit 1</option>
+                            <option value="tja2">Tanjung Awar-Awar Unit 2</option>
+                        </select>
+                        <label for="unitName">Unit</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="date" class="form-control" id="startDate" name="startDate" value="now">
+                        <label for="startDate">Start Date</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="date" class="form-control" id="endDate" name="endDate">
+                        <label for="endDate">End Date</label>
+                    </div>
+
+                    <div class="col-12">
+                        <button class="btn btn-primary" type="submit">Submit form</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-9 pt-3">
+        <div class="card" style="min-height: 400px; font-size: smaller;">
+            <div class="card-body">
+                <h5 class="text-center">Kertas Kerja Perhitungan BAT</h5>
+                <dl class="row">
+                    <dt class="col-sm-3">Unit Pembangkit</dt>
+                    <dd class="col-sm-9">: UBJOM Tanjung Awar - Awar</dd>
+                    
+                    <dt class="col-sm-3">Lokasi</dt>
+                    <dd class="col-sm-9">: Tanjung Awar Awar - Tuban</dd>
+                    
+                    <dt class="col-sm-3">Tipe Pembangkit</dt>
+                    <dd class="col-sm-9">: Pembangkit Listrik Tenaga Uap</dd>
+                    
+                    <dt class="col-sm-3">Kapasitas</dt>
+                    <dd class="col-sm-9">: UBJOM Tanjung Awar - Awar</dd>
+                    
+                    <dt class="col-sm-3">Tanggal</dt>
+                    <dd class="col-sm-9" id="home.date">: 2022-01-01</dd>
+                </dl>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <h6 class="bg-info text-white text-center">Unit 1</h6>
+                        <div class="card">
+                            <div class="card-body">
+                                <dl class="row p-0">
+                                    <dt class="col-sm-10 mb-2 bg-primary text-white">Enable Hours Modul BAT</dt>
+                                    <dt class="col-sm-2 text-center mb-2 bg-primary text-white" id="home.l11">3370.0</dd>
+                                    
+                                    <dt class="col-sm-10 mb-2 bg-primary text-white">Period Hours</dt>
+                                    <dt class="col-sm-2 text-center mb-2 bg-primary text-white" id="home.l13">4320.0</dd>
+                                    
+                                    <dt class="col-sm-10 mb-2 bg-primary text-white">Durasi Pengurang Period Hours</dt>
+                                    <dt class="col-sm-2 text-center mb-2 bg-primary text-white" id="home.l15">9.0</dd>
+                                    
+                                    <dd class="col-sm-1 mb-0 pe-0">a.</dd>
+                                    <dd class="col-sm-9 mb-0 p-0">Gangguan Unit</dd>
+                                    <dd class="col-sm-2 text-center mb-0" id="home.l16">9.0</dd>
+                                    
+                                    <dd class="col-sm-1 mb-0 pe-0"></dd>
+                                    <dd class="col-sm-1 mb-0 p-0">a.1.</dd>
+                                    <dd class="col-sm-8 mb-0 ps-0">Perbaikan equipment terkait BAT (Status Waiting Unit Shutdown/Sistem BAT outservice)</dd>
+                                    <dd class="col-sm-2 text-center mb-0" id="home.l17">-</dd>
+                                    
+                                    <dd class="col-sm-1 mb-0 pe-0"></dd>
+                                    <dd class="col-sm-1 mb-0 p-0">a.2.</dd>
+                                    <dd class="col-sm-8 mb-0 ps-0">Maintenance Modul BAT yang membutuhkan Modul disable</dd>
+                                    <dd class="col-sm-2 text-center mb-0" id="home.l18">2</dd>
+                                    
+                                    <dd class="col-sm-1 mb-0 pe-0">b.</dd>
+                                    <dd class="col-sm-9 mb-0 p-0">Load &lt 70%</dd>
+                                    <dd class="col-sm-2 text-center mb-0" id="home.l19">2.0</dd>
+                                    
+                                    <dd class="col-sm-1 mb-0 pe-0">c.</dd>
+                                    <dd class="col-sm-9 mb-0 p-0">Pelaksanaan Uji Performance Test Unit</dd>
+                                    <dd class="col-sm-2 text-center mb-0" id="home.l20">-</dd>
+                                    
+                                    <dd class="col-sm-1 mb-2 pe-0">d.</dd>
+                                    <dd class="col-sm-9 mb-2 p-0">Waktu disable oleh operator</dd>
+                                    <dd class="col-sm-2 text-center mb-2" id="home.l21">934.0</dd>
+                                    
+                                    <dt class="col-sm-10 mb-0 bg-primary text-white">Available Hours (efektif)</dt>
+                                    <dt class="col-sm-2 text-center mb-0 bg-primary text-white" id="home.l25">4311.0</dd>
+                                </dl>                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <h6 class="bg-info text-white text-center">Unit 2</h6>
+                        <div class="card">
+                            <div class="card-body">
+                                <dl class="row p-0">
+                                    <dt class="col-sm-10 mb-2 bg-primary text-white">Enable Hours Modul BAT</dt>
+                                    <dt class="col-sm-2 text-center mb-2 bg-primary text-white" id="home.l11">4002.0</dd>
+                                    
+                                    <dt class="col-sm-10 mb-2 bg-primary text-white">Period Hours</dt>
+                                    <dt class="col-sm-2 text-center mb-2 bg-primary text-white" id="home.l13">4320.0</dd>
+                                    
+                                    <dt class="col-sm-10 mb-2 bg-primary text-white">Durasi Pengurang Period Hours</dt>
+                                    <dt class="col-sm-2 text-center mb-2 bg-primary text-white" id="home.l15">2.0</dd>
+                                    
+                                    <dd class="col-sm-1 mb-0 pe-0">a.</dd>
+                                    <dd class="col-sm-9 mb-0 p-0">Gangguan Unit</dd>
+                                    <dd class="col-sm-2 text-center mb-0" id="home.l16">2.0</dd>
+                                    
+                                    <dd class="col-sm-1 mb-0 pe-0"></dd>
+                                    <dd class="col-sm-1 mb-0 p-0">a.1.</dd>
+                                    <dd class="col-sm-8 mb-0 ps-0">Perbaikan equipment terkait BAT (Status Waiting Unit Shutdown/Sistem BAT outservice)</dd>
+                                    <dd class="col-sm-2 text-center mb-0" id="home.l17">-</dd>
+                                    
+                                    <dd class="col-sm-1 mb-0 pe-0"></dd>
+                                    <dd class="col-sm-1 mb-0 p-0">a.2.</dd>
+                                    <dd class="col-sm-8 mb-0 ps-0">Maintenance Modul BAT yang membutuhkan Modul disable</dd>
+                                    <dd class="col-sm-2 text-center mb-0" id="home.l18">-</dd>
+                                    
+                                    <dd class="col-sm-1 mb-0 pe-0">b.</dd>
+                                    <dd class="col-sm-9 mb-0 p-0">Load &lt 70%</dd>
+                                    <dd class="col-sm-2 text-center mb-0" id="home.l19">-</dd>
+                                    
+                                    <dd class="col-sm-1 mb-0 pe-0">c.</dd>
+                                    <dd class="col-sm-9 mb-0 p-0">Pelaksanaan Uji Performance Test Unit</dd>
+                                    <dd class="col-sm-2 text-center mb-0" id="home.l20">-</dd>
+                                    
+                                    <dd class="col-sm-1 mb-2 pe-0">d.</dd>
+                                    <dd class="col-sm-9 mb-2 p-0">Waktu disable oleh operator</dd>
+                                    <dd class="col-sm-2 text-center mb-2" id="home.l21">316.0</dd>
+                                    
+                                    <dt class="col-sm-10 mb-0 bg-primary text-white">Available Hours (efektif)</dt>
+                                    <dt class="col-sm-2 text-center mb-0 bg-primary text-white" id="home.l25">4318.0</dd>
+                                </dl>                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 mt-4">
+                        <h6>Efektivitas Modul BAT</h6>
+                        <div class="row py-2">
+                            <div class="col-sm-3 m-auto align-middle">Efektivitas Modul BAT = </div>
+                            <div class="col-sm ">
+                                Jumlah Enable Hours Modul BAT
+                                <hr class="p-0 m-0">
+                                Jumlah Available Hours (Efektif) Modul BAT
+                            </div>
+                            <div class="col-sm m-auto">
+                                * 100 %
+                            </div>
+                        </div>
+                        
+                        <div class="row py-2">
+                            <div class="col-sm-3 align-middle d-flex flex-column align-items-end">=</div>
+                            <div class="col-sm ">
+                                7379.0
+                                <hr class="p-0 m-0">
+                                8629.0
+                            </div>
+                            <div class="col-sm m-auto">
+                                * 100 %
+                            </div>
+                        </div>
+                        
+                        <div class="row py-2">
+                            <div class="col-sm-3 align-middle d-flex flex-column align-items-end">=</div>
+                            <div class="col-sm-1 bg-info fw-bolder">
+                                85.51 %
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('startDate').valueAsDate = new Date();
+    document.getElementById('endDate').valueAsDate = new Date();
+</script>
+{% endblock content %}
