@@ -132,69 +132,72 @@ def get_laporan_kemanfaatan(data, unit='tja'):
     ret['datestart'] = datestart
     ret['dateend'] = dateend
 
-    # Unit 1
-    tags = [DB1.copt_enable_tag, DB1.sopt_enable_tag, DB1.watchdog_tag, 
-            DB1.copt_safeguard_tag, DB1.sopt_safeguard_tag, DB1.gross_load_tag]
-    df = DB1.read_tag(tags, timestart=f'"{datestart}"', timeend=f'"{dateend}"')
-    df_gangguan = DB1.read_gangguan(timestart=f'"{datestart}"', timeend=f'"{dateend}"', category=None)
-    dfg_timeseries = pd.DataFrame(columns=df_gangguan.index, index=df.index)
-    for i in df_gangguan.index:
-        f_date_start = df_gangguan.loc[i, 'f_date_start']
-        f_date_end = df_gangguan.loc[i, 'f_date_end']
-        dfg_timeseries.loc[f_date_start, i] = 1
-        dfg_timeseries.loc[f_date_end, i] = 0
-    dfg_timeseries = dfg_timeseries.ffill()
-    dfg_timeseries = dfg_timeseries.fillna(0)
-    dfg_timeseries['total'] = dfg_timeseries.max(axis=1)
-    
-    df_gangguan_unit = dfg_timeseries[['total']].rename(columns={'total': 'Perbaikan'})
-    df_gangguan_unit['Safeguard'] = 1 - df[['SAFEGUARD:COMBUSTION','SAFEGUARD:SOOTBLOW','WatchdogStatus']].max(axis=1)
-    df_gangguan_unit['Load'] = (df[DB1.gross_load_tag] < 0.7*350).astype(int)
+    try:
+        # Unit 1
+        tags = [DB1.copt_enable_tag, DB1.sopt_enable_tag, DB1.watchdog_tag, 
+                DB1.copt_safeguard_tag, DB1.sopt_safeguard_tag, DB1.gross_load_tag]
+        df = DB1.read_tag(tags, timestart=f'"{datestart}"', timeend=f'"{dateend}"')
+        df_gangguan = DB1.read_gangguan(timestart=f'"{datestart}"', timeend=f'"{dateend}"', category=None)
+        dfg_timeseries = pd.DataFrame(columns=df_gangguan.index, index=df.index)
+        for i in df_gangguan.index:
+            f_date_start = df_gangguan.loc[i, 'f_date_start']
+            f_date_end = df_gangguan.loc[i, 'f_date_end']
+            dfg_timeseries.loc[f_date_start, i] = 1
+            dfg_timeseries.loc[f_date_end, i] = 0
+        dfg_timeseries = dfg_timeseries.ffill()
+        dfg_timeseries = dfg_timeseries.fillna(0)
+        dfg_timeseries['total'] = dfg_timeseries.max(axis=1)
+        
+        df_gangguan_unit = dfg_timeseries[['total']].rename(columns={'total': 'Perbaikan'})
+        df_gangguan_unit['Safeguard'] = 1 - df[['SAFEGUARD:COMBUSTION','SAFEGUARD:SOOTBLOW','WatchdogStatus']].max(axis=1)
+        df_gangguan_unit['Load'] = (df[DB1.gross_load_tag] < 0.7*350).astype(int)
 
-    ret['l11'] = df[[DB1.copt_enable_tag, DB1.sopt_enable_tag]].max(axis=1).sum()
-    ret['l13'] = (dateend - datestart).seconds / 60
-    ret['l15'] = df_gangguan_unit.max(axis=1).sum()
-    ret['l17'] = df_gangguan_unit['Perbaikan'].sum()
-    ret['l18'] = df_gangguan_unit['Safeguard'].sum()
-    ret['l19'] = df_gangguan_unit['Load'].sum()
-    ret['l25'] = len(df_gangguan_unit) - ret['l15']
+        ret['l11'] = df[[DB1.copt_enable_tag, DB1.sopt_enable_tag]].max(axis=1).sum()
+        ret['l13'] = (dateend - datestart).seconds / 60
+        ret['l15'] = df_gangguan_unit.max(axis=1).sum()
+        ret['l17'] = df_gangguan_unit['Perbaikan'].sum()
+        ret['l18'] = df_gangguan_unit['Safeguard'].sum()
+        ret['l19'] = df_gangguan_unit['Load'].sum()
+        ret['l25'] = len(df_gangguan_unit) - ret['l15']
 
-    # Unit 2
-    tags = [DB2.copt_enable_tag, DB2.sopt_enable_tag, DB2.watchdog_tag, 
-            DB2.copt_safeguard_tag, DB2.sopt_safeguard_tag, DB2.gross_load_tag]
-    df = DB2.read_tag(tags, timestart=f'"{datestart}"', timeend=f'"{dateend}"')
-    df_gangguan = DB2.read_gangguan(timestart=f'"{datestart}"', timeend=f'"{dateend}"', category=None)
-    dfg_timeseries = pd.DataFrame(columns=df_gangguan.index, index=df.index)
-    for i in df_gangguan.index:
-        f_date_start = df_gangguan.loc[i, 'f_date_start']
-        f_date_end = df_gangguan.loc[i, 'f_date_end']
-        dfg_timeseries.loc[f_date_start, i] = 1
-        dfg_timeseries.loc[f_date_end, i] = 0
-    dfg_timeseries = dfg_timeseries.ffill()
-    dfg_timeseries = dfg_timeseries.fillna(0)
-    dfg_timeseries['total'] = dfg_timeseries.max(axis=1)
-    
-    df_gangguan_unit = dfg_timeseries[['total']].rename(columns={'total': 'Perbaikan'})
-    df_gangguan_unit['Safeguard'] = 1 - df[['SAFEGUARD:COMBUSTION','SAFEGUARD:SOOTBLOW','WatchdogStatus']].max(axis=1)
-    df_gangguan_unit['Load'] = (df[DB2.gross_load_tag] < 0.7*350).astype(int)
+        # Unit 2
+        tags = [DB2.copt_enable_tag, DB2.sopt_enable_tag, DB2.watchdog_tag, 
+                DB2.copt_safeguard_tag, DB2.sopt_safeguard_tag, DB2.gross_load_tag]
+        df = DB2.read_tag(tags, timestart=f'"{datestart}"', timeend=f'"{dateend}"')
+        df_gangguan = DB2.read_gangguan(timestart=f'"{datestart}"', timeend=f'"{dateend}"', category=None)
+        dfg_timeseries = pd.DataFrame(columns=df_gangguan.index, index=df.index)
+        for i in df_gangguan.index:
+            f_date_start = df_gangguan.loc[i, 'f_date_start']
+            f_date_end = df_gangguan.loc[i, 'f_date_end']
+            dfg_timeseries.loc[f_date_start, i] = 1
+            dfg_timeseries.loc[f_date_end, i] = 0
+        dfg_timeseries = dfg_timeseries.ffill()
+        dfg_timeseries = dfg_timeseries.fillna(0)
+        dfg_timeseries['total'] = dfg_timeseries.max(axis=1)
+        
+        df_gangguan_unit = dfg_timeseries[['total']].rename(columns={'total': 'Perbaikan'})
+        df_gangguan_unit['Safeguard'] = 1 - df[['SAFEGUARD:COMBUSTION','SAFEGUARD:SOOTBLOW','WatchdogStatus']].max(axis=1)
+        df_gangguan_unit['Load'] = (df[DB2.gross_load_tag] < 0.7*350).astype(int)
 
-    ret['y11'] = df[[DB2.copt_enable_tag, DB2.sopt_enable_tag]].max(axis=1).sum()
-    ret['y13'] = (dateend - datestart).seconds / 60
-    ret['y15'] = df_gangguan_unit.max(axis=1).sum()
-    ret['y17'] = df_gangguan_unit['Perbaikan'].sum()
-    ret['y18'] = df_gangguan_unit['Safeguard'].sum()
-    ret['y19'] = df_gangguan_unit['Load'].sum()
-    ret['y25'] = len(df_gangguan_unit) - ret['y15']
-    
-    for k in ret.keys():
-        if k.startswith('l') or k.startswith('y'):
-            try: ret[k] = round(ret[k] / 60, 2)
-            except: pass
-    
-    ret['jumlahenablehours'] = ret['l11'] + ret['y11']
-    ret['jumlahavailablehours'] = ret['l25'] + ret['y25']
+        ret['y11'] = df[[DB2.copt_enable_tag, DB2.sopt_enable_tag]].max(axis=1).sum()
+        ret['y13'] = (dateend - datestart).seconds / 60
+        ret['y15'] = df_gangguan_unit.max(axis=1).sum()
+        ret['y17'] = df_gangguan_unit['Perbaikan'].sum()
+        ret['y18'] = df_gangguan_unit['Safeguard'].sum()
+        ret['y19'] = df_gangguan_unit['Load'].sum()
+        ret['y25'] = len(df_gangguan_unit) - ret['y15']
+        
+        for k in ret.keys():
+            if k.startswith('l') or k.startswith('y'):
+                try: ret[k] = round(ret[k] / 60, 2)
+                except: pass
+        
+        ret['jumlahenablehours'] = ret['l11'] + ret['y11']
+        ret['jumlahavailablehours'] = ret['l25'] + ret['y25']
 
-    ret['efektivitaspersen'] = round(100 * ret['jumlahenablehours'] / ret['jumlahavailablehours'], 2)
+        ret['efektivitaspersen'] = round(100 * ret['jumlahenablehours'] / ret['jumlahavailablehours'], 2)
+    except:
+        pass
 
     return ret
 

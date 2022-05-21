@@ -44,6 +44,11 @@ class Database(object):
         df = df.pivot_table(index='f_date_rec', columns='f_address_no', values='f_value')
         df = df.resample('1min').mean().ffill()
 
+        # Filling unavailable tags
+        for tag in tuple(tagname):
+            if tag not in df.columns:
+                df[tag] = None
+
         return df 
     
     def read_gangguan(self, timestart=None, timeend=None, category=None):
