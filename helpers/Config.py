@@ -11,7 +11,9 @@ TagsDescription = {
     "SOPT Enable": "SOOT BLOWER OPERATION ON/OFF (Main Start/Stop)",
     "Watchdog": "WatchdogStatus",
     "COPT Safeguard": "SAFEGUARD:COMBUSTION",
-    "Efficiency": "Efficiency"
+    "SOPT Safeguard": "SAFEGUARD:SOOTBLOW",
+    "Efficiency": "Efficiency",
+    "Gross Load": "GEN ACTIVE POWER",
 }
 
 UpdateRate = 60 * 10     # seconds

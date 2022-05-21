@@ -1,5 +1,4 @@
-from distutils.log import debug
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect, request
 from Process import *
 import time, os
 
@@ -25,9 +24,15 @@ def page_server_status():
     }
     return render_template('Server Status.html', data = data)
 
-@app.route("/laporan-kemanfaatan")
+@app.route("/laporan-kemanfaatan", methods=['GET', 'POST'])
 def page_laporan_kemanfaatan():
-    return render_template("Laporan Kemanfaatan - Start.html")
+    data_requests = dict(request.args)
+    if data_requests == {}:
+        home = {}
+    else:
+        home = get_laporan_kemanfaatan(data_requests)
+    print(home)
+    return render_template("Laporan Kemanfaatan - Start.html", home = home)
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5002, debug=True)

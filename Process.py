@@ -116,6 +116,49 @@ def get_server_status(server, debug_mode=True):
     }
     return ret
 
+def get_laporan_kemanfaatan(data, unit='tja'):
+    datestart = 'now'
+    dateend = 'now'
+    ret = {}
+
+    if 'datestart' in data.keys():
+        datestart = data['datestart']
+    if 'dateend' in data.keys():
+        dateend = data['dateend']
+
+    datestart = pd.to_datetime(datestart)
+    dateend = pd.to_datetime(dateend)
+    datestart, dateend = (min(datestart, dateend), max(datestart, dateend) + pd.to_timedelta('1d') - pd.to_timedelta('1min')) 
+    ret['datestart'] = datestart
+    ret['dateend'] = dateend
+
+    # Unit 1
+    tags = [DB1.copt_enable_tag, DB1.sopt_enable_tag, DB1.watchdog_tag, 
+            DB1.copt_safeguard_tag, DB1.sopt_safeguard_tag, DB1.gross_load_tag]
+    df = DB1.read_tag(tags, timestart=f'"{datestart}"', timeend=f'"{dateend}"')
+    df_gangguan = DB1.read_gangguan(timestart=f'"{datestart}"', timeend=f'"{dateend}"', category=None)
+    dfg_timeseries = pd.DataFrame(columns=df_gangguan.index, index=df.index)
+    for i in df_gangguan.index:
+        f_date_start = df_gangguan.loc[i, 'f_date_start']
+        f_date_end = df_gangguan.loc[i, 'f_date_end']
+        dfg_timeseries.loc[f_date_start, i] = 1
+        dfg_timeseries.loc[f_date_end, i] = 0
+    dfg_timeseries = dfg_timeseries.ffill()
+    dfg_timeseries = dfg_timeseries.fillna(0)
+    dfg_timeseries['total'] = dfg_timeseries.max(axis=1)
+    
+    ret['l11'] = df[[DB1.copt_enable_tag, DB1.sopt_enable_tag]].max(axis=1).sum()
+    ret['l13'] = (dateend - datestart).seconds / 60
+    ret['l17'] = dfg_timeseries['total'].sum()
+    ret['l19'] = (df[DB1.gross_load_tag] < 0.7*350).astype(int).sum()
+    
+    for k in ret.keys():
+        if k.startswith('l') or k.startswith('y'):
+            try: ret[k] = round(ret[k] / 60, 2)
+            except: pass
+    
+    return ret
+
 def __text_to_dataframe__(text):
     # Text to table
     results = [r for r in text.split('\n')]
@@ -145,6 +188,22 @@ def __text_to_dataframe__(text):
 
     results_df = pd.DataFrame(results_table[1:], columns=results_table[0])
     return results_df
+
+
+# Data Processing
+def process_safeguard():
+    q = f"""SELECT tsrd.f_sequence AS "Sequence", tsrd.f_tag_sensor as Tag, tsrd.f_bracket_open AS "Bracket Open", ttrc.f_description AS Description, 
+        tsrd.f_bracket_close AS "Bracket Close", tsr.f_value AS SampleValue FROM tb_combustion_rules_dtl tsrd 
+        LEFT JOIN tb_bat_raw tsr 
+        ON tsrd.f_tag_sensor = tsr.f_address_no
+        LEFT JOIN tb_combustion_rules_hdr tsrh 
+        ON tsrd.f_rule_hdr_id = tsrh.f_rule_hdr_id 
+        LEFT JOIN tb_tags_read_conf ttrc 
+        ON tsrd.f_tag_sensor = ttrc.f_tag_name 
+        WHERE tsrd.f_is_active = 1
+        AND tsrh.f_rule_descr = "SAFEGUARD"
+        ORDER BY tsrd.f_rule_hdr_id ASC, tsrd.f_sequence ASC;"""
+    return
 
 if __name__ == "__main__":
     data = get_home()

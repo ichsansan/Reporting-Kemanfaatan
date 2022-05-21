@@ -22,12 +22,12 @@ Laporan Kemanfaatan BAT
                         <label for="unitName">Unit</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input type="date" class="form-control" id="startDate" name="startDate" value="now">
-                        <label for="startDate">Start Date</label>
+                        <input type="date" class="form-control" id="datestart" name="datestart" value="now">
+                        <label for="datestart">Start Date</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input type="date" class="form-control" id="endDate" name="endDate">
-                        <label for="endDate">End Date</label>
+                        <input type="date" class="form-control" id="dateend" name="dateend">
+                        <label for="dateend">End Date</label>
                     </div>
 
                     <div class="col-12">
@@ -52,10 +52,16 @@ Laporan Kemanfaatan BAT
                     <dd class="col-sm-9">: Pembangkit Listrik Tenaga Uap</dd>
                     
                     <dt class="col-sm-3">Kapasitas</dt>
-                    <dd class="col-sm-9">: UBJOM Tanjung Awar - Awar</dd>
+                    <dd class="col-sm-9">: 2 x 350 MW</dd>
                     
                     <dt class="col-sm-3">Tanggal</dt>
-                    <dd class="col-sm-9" id="home.date">: 2022-01-01</dd>
+                    <dd class="col-sm-9" id="home.date">
+                        {% if home.datestart %}
+                            : {{home.datestart}} sampai {{home.dateend}}
+                        {% else %}
+                            :
+                        {% endif %}
+                    </dd>
                 </dl>
                 <div class="row">
                     <div class="col-lg-6">
@@ -64,42 +70,42 @@ Laporan Kemanfaatan BAT
                             <div class="card-body">
                                 <dl class="row p-0">
                                     <dt class="col-sm-10 mb-2 bg-primary text-white">Enable Hours Modul BAT</dt>
-                                    <dt class="col-sm-2 text-center mb-2 bg-primary text-white" id="home.l11">3370.0</dd>
+                                    <dt class="col-sm-2 text-center mb-2 bg-primary text-white" id="home.l11">{{home.l11}}</dd>
                                     
                                     <dt class="col-sm-10 mb-2 bg-primary text-white">Period Hours</dt>
-                                    <dt class="col-sm-2 text-center mb-2 bg-primary text-white" id="home.l13">4320.0</dd>
+                                    <dt class="col-sm-2 text-center mb-2 bg-primary text-white" id="home.l13">{{home.l13}}</dd>
                                     
                                     <dt class="col-sm-10 mb-2 bg-primary text-white">Durasi Pengurang Period Hours</dt>
-                                    <dt class="col-sm-2 text-center mb-2 bg-primary text-white" id="home.l15">9.0</dd>
+                                    <dt class="col-sm-2 text-center mb-2 bg-primary text-white" id="home.l15">{{home.l15}}</dd>
                                     
                                     <dd class="col-sm-1 mb-0 pe-0">a.</dd>
                                     <dd class="col-sm-9 mb-0 p-0">Gangguan Unit</dd>
-                                    <dd class="col-sm-2 text-center mb-0" id="home.l16">9.0</dd>
+                                    <dd class="col-sm-2 text-center mb-0" id="home.l16">{{home.l16}}</dd>
                                     
                                     <dd class="col-sm-1 mb-0 pe-0"></dd>
                                     <dd class="col-sm-1 mb-0 p-0">a.1.</dd>
                                     <dd class="col-sm-8 mb-0 ps-0">Perbaikan equipment terkait BAT (Status Waiting Unit Shutdown/Sistem BAT outservice)</dd>
-                                    <dd class="col-sm-2 text-center mb-0" id="home.l17">-</dd>
+                                    <dd class="col-sm-2 text-center mb-0" id="home.l17">{{home.l17}}</dd>
                                     
                                     <dd class="col-sm-1 mb-0 pe-0"></dd>
                                     <dd class="col-sm-1 mb-0 p-0">a.2.</dd>
                                     <dd class="col-sm-8 mb-0 ps-0">Maintenance Modul BAT yang membutuhkan Modul disable</dd>
-                                    <dd class="col-sm-2 text-center mb-0" id="home.l18">2</dd>
+                                    <dd class="col-sm-2 text-center mb-0" id="home.l18">{{home.l18}}</dd>
                                     
                                     <dd class="col-sm-1 mb-0 pe-0">b.</dd>
                                     <dd class="col-sm-9 mb-0 p-0">Load &lt 70%</dd>
-                                    <dd class="col-sm-2 text-center mb-0" id="home.l19">2.0</dd>
+                                    <dd class="col-sm-2 text-center mb-0" id="home.l19">{{home.l19}}</dd>
                                     
                                     <dd class="col-sm-1 mb-0 pe-0">c.</dd>
                                     <dd class="col-sm-9 mb-0 p-0">Pelaksanaan Uji Performance Test Unit</dd>
-                                    <dd class="col-sm-2 text-center mb-0" id="home.l20">-</dd>
+                                    <dd class="col-sm-2 text-center mb-0" id="home.l20">{{home.l20}}</dd>
                                     
                                     <dd class="col-sm-1 mb-2 pe-0">d.</dd>
                                     <dd class="col-sm-9 mb-2 p-0">Waktu disable oleh operator</dd>
-                                    <dd class="col-sm-2 text-center mb-2" id="home.l21">934.0</dd>
+                                    <dd class="col-sm-2 text-center mb-2" id="home.l21">{{home.l21}}</dd>
                                     
                                     <dt class="col-sm-10 mb-0 bg-primary text-white">Available Hours (efektif)</dt>
-                                    <dt class="col-sm-2 text-center mb-0 bg-primary text-white" id="home.l25">4311.0</dd>
+                                    <dt class="col-sm-2 text-center mb-0 bg-primary text-white" id="home.l25">{{home.l25}}</dd>
                                 </dl>                
                             </div>
                         </div>
@@ -110,42 +116,42 @@ Laporan Kemanfaatan BAT
                             <div class="card-body">
                                 <dl class="row p-0">
                                     <dt class="col-sm-10 mb-2 bg-primary text-white">Enable Hours Modul BAT</dt>
-                                    <dt class="col-sm-2 text-center mb-2 bg-primary text-white" id="home.l11">4002.0</dd>
+                                    <dt class="col-sm-2 text-center mb-2 bg-primary text-white" id="home.y11">{{home.y11}}</dd>
                                     
                                     <dt class="col-sm-10 mb-2 bg-primary text-white">Period Hours</dt>
-                                    <dt class="col-sm-2 text-center mb-2 bg-primary text-white" id="home.l13">4320.0</dd>
+                                    <dt class="col-sm-2 text-center mb-2 bg-primary text-white" id="home.y13">{{home.y13}}</dd>
                                     
                                     <dt class="col-sm-10 mb-2 bg-primary text-white">Durasi Pengurang Period Hours</dt>
-                                    <dt class="col-sm-2 text-center mb-2 bg-primary text-white" id="home.l15">2.0</dd>
+                                    <dt class="col-sm-2 text-center mb-2 bg-primary text-white" id="home.y15">{{home.y15}}</dd>
                                     
                                     <dd class="col-sm-1 mb-0 pe-0">a.</dd>
                                     <dd class="col-sm-9 mb-0 p-0">Gangguan Unit</dd>
-                                    <dd class="col-sm-2 text-center mb-0" id="home.l16">2.0</dd>
+                                    <dd class="col-sm-2 text-center mb-0" id="home.y16">{{home.y16}}</dd>
                                     
                                     <dd class="col-sm-1 mb-0 pe-0"></dd>
                                     <dd class="col-sm-1 mb-0 p-0">a.1.</dd>
                                     <dd class="col-sm-8 mb-0 ps-0">Perbaikan equipment terkait BAT (Status Waiting Unit Shutdown/Sistem BAT outservice)</dd>
-                                    <dd class="col-sm-2 text-center mb-0" id="home.l17">-</dd>
+                                    <dd class="col-sm-2 text-center mb-0" id="home.y17">{{home.y17}}</dd>
                                     
                                     <dd class="col-sm-1 mb-0 pe-0"></dd>
                                     <dd class="col-sm-1 mb-0 p-0">a.2.</dd>
                                     <dd class="col-sm-8 mb-0 ps-0">Maintenance Modul BAT yang membutuhkan Modul disable</dd>
-                                    <dd class="col-sm-2 text-center mb-0" id="home.l18">-</dd>
+                                    <dd class="col-sm-2 text-center mb-0" id="home.y18">{{home.y18}}</dd>
                                     
                                     <dd class="col-sm-1 mb-0 pe-0">b.</dd>
                                     <dd class="col-sm-9 mb-0 p-0">Load &lt 70%</dd>
-                                    <dd class="col-sm-2 text-center mb-0" id="home.l19">-</dd>
+                                    <dd class="col-sm-2 text-center mb-0" id="home.y19">{{home.y19}}</dd>
                                     
                                     <dd class="col-sm-1 mb-0 pe-0">c.</dd>
                                     <dd class="col-sm-9 mb-0 p-0">Pelaksanaan Uji Performance Test Unit</dd>
-                                    <dd class="col-sm-2 text-center mb-0" id="home.l20">-</dd>
+                                    <dd class="col-sm-2 text-center mb-0" id="home.y20">{{home.y20}}</dd>
                                     
                                     <dd class="col-sm-1 mb-2 pe-0">d.</dd>
                                     <dd class="col-sm-9 mb-2 p-0">Waktu disable oleh operator</dd>
-                                    <dd class="col-sm-2 text-center mb-2" id="home.l21">316.0</dd>
+                                    <dd class="col-sm-2 text-center mb-2" id="home.y21">{{home.y21}}</dd>
                                     
                                     <dt class="col-sm-10 mb-0 bg-primary text-white">Available Hours (efektif)</dt>
-                                    <dt class="col-sm-2 text-center mb-0 bg-primary text-white" id="home.l25">4318.0</dd>
+                                    <dt class="col-sm-2 text-center mb-0 bg-primary text-white" id="home.y25">{{home.y25}}</dd>
                                 </dl>                
                             </div>
                         </div>
@@ -167,9 +173,9 @@ Laporan Kemanfaatan BAT
                         <div class="row py-2">
                             <div class="col-sm-3 align-middle d-flex flex-column align-items-end">=</div>
                             <div class="col-sm ">
-                                7379.0
+                                {{home.jumlahenablehours}}
                                 <hr class="p-0 m-0">
-                                8629.0
+                                {{home.jumlahavailablehours}}
                             </div>
                             <div class="col-sm m-auto">
                                 * 100 %
@@ -179,7 +185,7 @@ Laporan Kemanfaatan BAT
                         <div class="row py-2">
                             <div class="col-sm-3 align-middle d-flex flex-column align-items-end">=</div>
                             <div class="col-sm-1 bg-info fw-bolder">
-                                85.51 %
+                                {{home.efektivitaspersen}}
                             </div>
                         </div>
                     </div>
@@ -190,7 +196,7 @@ Laporan Kemanfaatan BAT
 </div>
 
 <script>
-    document.getElementById('startDate').valueAsDate = new Date();
-    document.getElementById('endDate').valueAsDate = new Date();
+    document.getElementById('datestart').valueAsDate = new Date();
+    document.getElementById('dateend').valueAsDate = new Date();
 </script>
 {% endblock content %}
