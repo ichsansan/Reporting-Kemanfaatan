@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from pexpect import ExceptionPexpect
 import plotly.graph_objects as go
 import os, time
 from plotly.subplots import make_subplots
@@ -199,6 +200,25 @@ def get_laporan_kemanfaatan(data, unit='tja'):
     except:
         pass
 
+    return ret
+
+def get_tipe_gangguan():
+    tipe_gangguan = DB1.mapping_tipe_gangguan
+    tipe_gangguan_2 = DB2.mapping_tipe_gangguan
+    for k in tipe_gangguan_2.keys():
+        if k not in tipe_gangguan.keys():
+            tipe_gangguan[k] = tipe_gangguan_2[k]
+    return tipe_gangguan
+
+def post_input_gangguan(data):
+    ret = {'message': 'Gagal menginput data'}
+    try:
+        if data['unitname'] == 'tja1':
+            ret['message'] = DB1.post_gangguan(data)
+        elif data['unitname'] == 'tja2':
+            ret['message'] = DB2.post_gangguan(data)
+    except Exception as E: 
+        print(E)
     return ret
 
 def __text_to_dataframe__(text):

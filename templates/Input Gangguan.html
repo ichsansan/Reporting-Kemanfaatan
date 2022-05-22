@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% block head %}
+Laporan Kemanfaatan BAT
+{% endblock head %}
+
+{% block content %}
+
+<style>
+    #count_message {
+        background-color: smoke;
+        margin-top: -20px;
+        margin-right: 5px;
+    }
+</style>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+<div class="alert alert-success alert-dismissible fade show">
+    {% for message in messages %}
+        {{ message }}
+    {% endfor %}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+  {% endif %}
+{% endwith %}
+
+<h1 class="py-2">Input Gangguan</h1>
+
+<div class="card">
+    <form class="card-body needs-validation" action="/input-gangguan" autocomplete="off" novalidate>
+        <div class="col-lg-7">
+            <div class="mb-3">
+                <label for="unitname" class="form-label">Nama Unit</label>
+                <select class="form-select" aria-label="Default select example" id="unitname" name="unitname" required>
+                    <option value="tja1" selected>Tanjung Awar-Awar Unit 1</option>
+                    <option value="tja2">Tanjung Awar-Awar Unit 2</option>
+                </select>
+            </div>
+            <div class="row">
+                <div class="mb-3 col-lg-6">
+                    <label for="datestart" class="form-label">Tanggal Mulai</label>
+                    <input type="datetime-local" id="datestart" name="datestart" class="form-control">
+                </div>
+                <div class="mb-3 col-lg-6">
+                    <label for="dateend" class="form-label">Tanggal Selesai</label>
+                    <input type="datetime-local" id="dateend" name="dateend" class="form-control">
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="tipegangguan" class="form-label">Tipe Gangguan</label>
+                <select class="form-select" aria-label="Default select example" id="tipegangguan" name="tipegangguan">
+                    {% for key in tipe_gangguan %}
+                        <option value="{{key}}">{{tipe_gangguan[key]}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="deskripsi" class="form-label">Deskripsi Gangguan</label>
+                <span class="badge bg-secondary ms-4" id="count_deskripsi">0 / 500</span>
+                <textarea type="text" id="deskripsi" name="deskripsi" class="form-control" style="height: 10rem;" maxlength="500"
+                    onkeyup="counter_deskripsi()" required></textarea>
+                <div class="invalid-feedback">
+                    Isi deskripsi tentang gangguan yang terjadi
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="remarks" class="form-label">Nama Penginput</label>
+                <input type="text" pattern=".{3,100}" id="remarks" name="remarks" class="form-control" required>
+                <div class="invalid-feedback">
+                    Isi nama penginput
+                </div>
+            </div>
+            <button class="btn btn-primary" type="submit">Submit</button>
+        </div>
+    </form>
+</div>
+
+<div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+      <img src="..." class="rounded me-2" alt="...">
+      <strong class="me-auto">Bootstrap</strong>
+      <small>11 mins ago</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+      Hello, world! This is a toast message.
+    </div>
+  </div>
+
+<script>
+    const now = new Date();
+    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+    const past = new Date();
+    past.setMinutes(past.getMinutes() - (now.getTimezoneOffset() + 1440));
+    document.getElementById('datestart').value = past.toISOString().slice(0, -8);
+    document.getElementById('dateend').value = now.toISOString().slice(0, -8);
+
+    (function () {
+        var forms = document.querySelectorAll('.needs-validation')
+
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
+
+    function counter_deskripsi(){
+        var teks = document.getElementById("deskripsi").value;
+        if (teks.length >= 500) {
+            document.getElementById("count_deskripsi").className = "badge bg-danger ms-4";
+        }
+        else {
+            document.getElementById("count_deskripsi").className = "badge bg-secondary ms-4";
+        }
+        document.getElementById("count_deskripsi").innerHTML = String(teks.length) + " / 500";
+    }
+</script>
+{% endblock content %}

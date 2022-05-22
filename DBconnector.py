@@ -1,12 +1,17 @@
+from venv import create
 import pandas as pd
 import numpy as np
 from helpers import Config
+from sqlalchemy import create_engine
 import os, time
 
 class Database(object):
     def __init__(self, engine) -> None:
-        self.engine = engine
+        if type(engine) == str: self.engine = create_engine(engine)
+        else: self.engine = engine
+
         self.set_tag()
+        self.set_mapping_gangguan()
 
     def set_tag(self) -> None:
         self.copt_enable_tag = self.get_tag_from_description(Config.TagsDescription['COPT Enable'])
@@ -17,6 +22,13 @@ class Database(object):
         self.sopt_safeguard_tag = Config.TagsDescription['SOPT Safeguard']
         self.efficiency_tag = Config.TagsDescription['Efficiency']
         
+        return 
+    
+    def set_mapping_gangguan(self) -> None:
+        q = f"""SELECT f_id, f_tipe_gangguan FROM tb_rp_category """
+        df = pd.read_sql(q, self.engine).astype(str)
+        self.mapping_tipe_gangguan = df.set_index('f_id')['f_tipe_gangguan'].to_dict()
+        self.mapping_tipe_gangguan_r = df.set_index('f_tipe_gangguan')['f_id'].to_dict()
         return 
 
     def get_tag_from_description(self, description):
@@ -79,3 +91,17 @@ class Database(object):
         df['f_duration'] = df['f_date_end'] - df['f_date_start']
         df = df.set_index('f_id')
         return df
+    
+    def post_gangguan(self, data):
+        f_date_start = pd.to_datetime(data['datestart'])
+        f_date_end = pd.to_datetime(data['dateend'])
+        f_tipe_id = str(data['tipegangguan'])
+        f_desc_gangguan = data['deskripsi']
+        f_remarks = data['remarks']
+        
+        q = f"""INSERT INTO tb_rp_gangguan (f_date_start, f_date_end, f_tipe_id, f_desc_gangguan, f_remarks)
+                VALUES ("{f_date_start}","{f_date_end}","{f_tipe_id}","{f_desc_gangguan}","{f_remarks}") """
+        with self.engine.connect() as conn:
+            response = conn.execute(q)
+            ret = f"Success importing {response.rowcount} line(s)."
+        return ret
