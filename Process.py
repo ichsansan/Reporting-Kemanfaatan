@@ -249,6 +249,7 @@ def __text_to_dataframe__(text):
         results_table.append(results_line)
 
     results_df = pd.DataFrame(results_table[1:], columns=results_table[0])
+    results_df = results_df.replace({"":None}).dropna()
     return results_df
 
 
