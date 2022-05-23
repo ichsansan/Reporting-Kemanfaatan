@@ -89,8 +89,15 @@ def get_svg(name):
     svg = re.sub('\{[0-9A-z_]+\}', '-', svg)
     return svg
 
-def get_bat_status():
-    return
+def get_daftar_gangguan():
+    df1 = DB1.read_gangguan()
+    df1.insert(0, "Unit", "Tanjung Awar-Awar 1")
+    df2 = DB2.read_gangguan()
+    df2.insert(0, "Unit", "Tanjung Awar-Awar 2")
+    df = df1.append(df2, ignore_index=True)
+    df = df.reset_index()
+    
+    return df.to_dict()
 
 def get_server_status(server, debug_mode=True):
     ret = {}

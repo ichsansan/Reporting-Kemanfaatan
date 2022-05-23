@@ -50,5 +50,10 @@ def page_input_gangguan():
         return redirect("/input-gangguan")
     return render_template("Input Gangguan.html", tipe_gangguan = tipe_gangguan, data = ret)
 
+@app.route("/daftar-gangguan")
+def page_daftar_gangguan():
+    daftar_gangguan = get_daftar_gangguan()
+    return render_template("Daftar Gangguan.html", data = daftar_gangguan)
+
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5002, debug=debug_mode)
