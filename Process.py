@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from pexpect import ExceptionPexpect
 import plotly.graph_objects as go
-import os, time
+import os, time, re
 from plotly.subplots import make_subplots
 from DBconnector import Database
 from helpers import Config, Dummy
@@ -66,6 +66,28 @@ def get_home():
     if update_figure_tja2:
         update_home('tja2')
     return
+
+def get_svg(name):
+    type, unit = name.split('-')
+    if type != 'copt': return ''
+    if unit == 'tja1': DB = DB1
+    elif unit == 'tja2': DB = DB2
+    SVG_PATH = "static/figure/Drawing TAW White v1.0.txt"
+    f = open(SVG_PATH)
+    svg_raw = f.readlines()
+    f.close()
+
+    svg = ''
+    for i in range(len(svg_raw)):
+        for j in range(len(svg_raw[i])):
+            if svg_raw[i][j].isascii():
+                svg += svg_raw[i][j].encode('utf-8').decode('utf-8')
+    sensor_values = DB.read_display()
+
+    for sensor_name in sensor_values.keys():
+        svg = svg.replace("{" + sensor_name + "}", str(sensor_values[sensor_name]))
+    svg = re.sub('\{[0-9A-z_]+\}', '-', svg)
+    return svg
 
 def get_bat_status():
     return

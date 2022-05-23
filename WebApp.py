@@ -11,9 +11,12 @@ def page_home():
     data = get_home()
     return render_template('Home.html')
 
-@app.route("/bat-status")
-def page_bat_status():
-    return render_template('BAT Status.html')
+@app.route("/bat-status/<name>")
+def page_bat_status(name=None):
+    if name == None or name == '':
+        return redirect("/bat-status/copt-tja1")
+    svgframe = get_svg(name)
+    return render_template('BAT Status.html', svgframe = svgframe, name=name)
 
 @app.route("/server-status")
 def page_server_status():
@@ -48,4 +51,4 @@ def page_input_gangguan():
     return render_template("Input Gangguan.html", tipe_gangguan = tipe_gangguan, data = ret)
 
 if __name__ == '__main__':
-    app.run('0.0.0.0', port=5002, debug=True)
+    app.run('0.0.0.0', port=5002, debug=debug_mode)

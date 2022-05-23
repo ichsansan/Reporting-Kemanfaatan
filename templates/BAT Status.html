@@ -8,26 +8,28 @@ BAT Status
 
 <ul class="nav nav-tabs justify-content-center nav-justified">
     <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+        <a class="nav-link dropdown-toggle {% if name == 'copt-tja1' or name == 'sopt-tja1' %}active{% endif %}" data-bs-toggle="dropdown" href="#" role="button"
             aria-expanded="false">Tanjung Awar-Awar Unit 1</a>
         <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Sootblow Optimization</a></li>
-            <li><a class="dropdown-item" href="#">Combustion Optimization</a></li>
+            <li><h6 class="dropdown-header">Boiler Auto Tuning</h6></li>
+            <li><a class="dropdown-item" href="/bat-status/sopt-tja1">Sootblow Optimization</a></li>
+            <li><a class="dropdown-item" href="/bat-status/copt-tja1">Combustion Optimization</a></li>
         </ul>
     </li>
     <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+        <a class="nav-link dropdown-toggle {% if name == 'copt-tja2' or name == 'sopt-tja2' %}active{% endif %}" data-bs-toggle="dropdown" href="#" role="button"
             aria-expanded="false">Tanjung Awar-Awar Unit 2</a>
         <ul class="dropdown-menu">
             <li><h6 class="dropdown-header">Boiler Auto Tuning</h6></li>
-            <li><a class="dropdown-item" href="#">Sootblow Optimization</a></li>
-            <li><a class="dropdown-item" href="#">Combustion Optimization</a></li>
+            <li><a class="dropdown-item" href="/bat-status/sopt-tja2">Sootblow Optimization</a></li>
+            <li><a class="dropdown-item" href="/bat-status/copt-tja2">Combustion Optimization</a></li>
         </ul>
     </li>
 </ul>
 
-<div class="justify-content-center">
+<div class="justify-content-center mx-5">
     <!-- <img src="/static/figure/Drawing TAW White v1.0.svg"> -->
-    <object data="/static/figure/Drawing TAW White v1.0.svg" width="100%" height="100%"> </object>
+    <!-- <object data="/static/figure/Drawing TAW White v1.0.svg" width="100%" height="100%"> </object> -->
+    {{svgframe|safe}}
 </div>
 {% endblock content %}

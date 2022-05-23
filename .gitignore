@@ -3,7 +3,7 @@ test request pak gun.ipynb
 test.csv
 test.ipynb
 test.py
-__pycache__
 helpers/__pycache__
 static/figure/home-tja1.html
 static/figure/home-tja2.html
+__pycache__/*

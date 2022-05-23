@@ -91,6 +91,15 @@ class Database(object):
         df['f_duration'] = df['f_date_end'] - df['f_date_start']
         df = df.set_index('f_id')
         return df
+
+    def read_display(self):
+        q = f"""SELECT d.f_desc, r.f_date_rec, r.f_value, d.f_units FROM cb_display d
+                LEFT JOIN tb_bat_raw r
+                ON d.f_tags = r.f_address_no """
+        df = pd.read_sql(q, self.engine)
+        df['f_value'] = df['f_value'].round(2).astype(str) + " " + df['f_units']
+        sensor_values = df.set_index('f_desc')['f_value'].to_dict()
+        return sensor_values
     
     def post_gangguan(self, data):
         f_date_start = pd.to_datetime(data['datestart'])
