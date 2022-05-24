@@ -226,7 +226,8 @@ def get_laporan_kemanfaatan(data, unit='tja'):
         ret['jumlahavailablehours'] = ret['l25'] + ret['y25']
 
         ret['efektivitaspersen'] = round(100 * ret['jumlahenablehours'] / ret['jumlahavailablehours'], 2)
-    except:
+    except Exception as E:
+        print(E)
         pass
 
     return ret

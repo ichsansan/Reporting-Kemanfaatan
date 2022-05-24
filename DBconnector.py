@@ -101,14 +101,6 @@ class Database(object):
         sensor_values = df.set_index('f_desc')['f_value'].to_dict()
         return sensor_values
 
-    def read_gangguan(self):
-        q = f"""SELECT g.f_date_start AS "DateStart", g.f_date_end AS "DateEnd", c.f_tipe_gangguan AS TipeGangguan, 
-                g.f_desc_gangguan AS Deskripsi, g.f_remarks AS "Remarks" FROM tb_rp_gangguan g
-                LEFT JOIN tb_rp_category c
-                ON g.f_tipe_id = c.f_id"""
-        df = pd.read_sql(q, self.engine)
-        return df
-    
     def post_gangguan(self, data):
         f_date_start = pd.to_datetime(data['datestart'])
         f_date_end = pd.to_datetime(data['dateend'])

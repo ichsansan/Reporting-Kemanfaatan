@@ -6,4 +6,5 @@ test.py
 helpers/__pycache__
 static/figure/home-tja1.html
 static/figure/home-tja2.html
-__pycache__/*
+__pycache__/DBconnector.cpython-37.pyc
+__pycache__/Process.cpython-37.pyc
