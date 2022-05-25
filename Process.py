@@ -90,11 +90,12 @@ def get_svg(name):
     return svg
 
 def get_daftar_gangguan():
-    df1 = DB1.read_gangguan()
+    df1 = DB1.read_gangguan(clip=False)
     df1.insert(0, "Unit", "Tanjung Awar-Awar 1")
-    df2 = DB2.read_gangguan()
+    df2 = DB2.read_gangguan(clip=False)
     df2.insert(0, "Unit", "Tanjung Awar-Awar 2")
     df = df1.append(df2, ignore_index=True)
+    df.insert(3, "Durasi", df['DateEnd'] - df['DateStart'])
     df = df.reset_index()
     
     return df.to_dict()

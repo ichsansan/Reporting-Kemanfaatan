@@ -63,9 +63,9 @@ class Database(object):
 
         return df 
     
-    def read_gangguan(self, timestart=None, timeend=None, category=None):
-        if not timeend: timeend = 'NOW()'
-        if not timestart: timestart = 'NOW() - INTERVAL 1 DAY'
+    def read_gangguan(self, timestart=None, timeend=None, category=None, clip=True):
+        if not timeend: timeend = (pd.to_datetime(time.ctime())).strftime('"%Y-%m-%d %H:%M"')
+        if not timestart: timestart = (pd.to_datetime(time.ctime()) - pd.to_timedelta('1day')).strftime('"%Y-%m-%d %H:%M"')
         
         # Where script
         wherescript  =  f"""(ga.f_date_start BETWEEN {timestart} AND {timeend}
@@ -75,21 +75,21 @@ class Database(object):
                 wherescript += f"""AND ga.f_tipe_id = {category}"""
             elif type(category) == tuple or type(category) == list:
                 wherescript += f"""AND ga.f_tipe_id IN {tuple(category)}"""
-        q = f"""SELECT ga.f_id, ga.f_date_start, ga.f_date_end,
-                cat.f_tipe_gangguan, ga.f_desc_gangguan, ga.f_remarks FROM tb_rp_gangguan ga
+        q = f"""SELECT ga.f_id AS ID, ga.f_date_start AS DateStart, ga.f_date_end AS DateEnd,
+                cat.f_tipe_gangguan AS TipeGangguan, ga.f_desc_gangguan AS Deskripsi, ga.f_remarks AS Remarks FROM tb_rp_gangguan ga
                 LEFT JOIN tb_rp_category cat
                 ON ga.f_tipe_id = cat.f_id 
-                WHERE {wherescript}
+                
                 """
         df = pd.read_sql(q, self.engine)
 
         timestart_pd = pd.to_datetime(timestart.replace('"',''))
         timeend_pd = pd.to_datetime(timeend.replace('"',''))
 
-        df['f_date_start'] = df['f_date_start'].clip(lower=pd.to_datetime(timestart_pd), upper=pd.to_datetime(timeend_pd))
-        df['f_date_end'] = df['f_date_end'].clip(lower=pd.to_datetime(timestart_pd), upper=pd.to_datetime(timeend_pd))
-        df['f_duration'] = df['f_date_end'] - df['f_date_start']
-        df = df.set_index('f_id')
+        if clip:
+            df['DateStart'] = df['DateStart'].clip(lower=pd.to_datetime(timestart_pd), upper=pd.to_datetime(timeend_pd))
+            df['DateEnd'] = df['DateEnd'].clip(lower=pd.to_datetime(timestart_pd), upper=pd.to_datetime(timeend_pd))
+        df = df.set_index('ID')
         return df
 
     def read_display(self):
