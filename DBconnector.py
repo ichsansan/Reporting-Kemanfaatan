@@ -68,18 +68,20 @@ class Database(object):
         if not timestart: timestart = (pd.to_datetime(time.ctime()) - pd.to_timedelta('1day')).strftime('"%Y-%m-%d %H:%M"')
         
         # Where script
-        wherescript  =  f"""(ga.f_date_start BETWEEN {timestart} AND {timeend}
-                            OR ga.f_date_end BETWEEN {timestart} AND {timeend}) """
-        if category:
-            if type(category) == str:
-                wherescript += f"""AND ga.f_tipe_id = {category}"""
-            elif type(category) == tuple or type(category) == list:
-                wherescript += f"""AND ga.f_tipe_id IN {tuple(category)}"""
+        if clip:
+            wherescript  =  f"""(ga.f_date_start BETWEEN {timestart} AND {timeend}
+                                OR ga.f_date_end BETWEEN {timestart} AND {timeend}) """
+            if category:
+                if type(category) == str:
+                    wherescript += f"""AND ga.f_tipe_id = {category}"""
+                elif type(category) == tuple or type(category) == list:
+                    wherescript += f"""AND ga.f_tipe_id IN {tuple(category)}"""
+        else: wherescript = "1"
         q = f"""SELECT ga.f_id AS ID, ga.f_date_start AS DateStart, ga.f_date_end AS DateEnd,
                 cat.f_tipe_gangguan AS TipeGangguan, ga.f_desc_gangguan AS Deskripsi, ga.f_remarks AS Remarks FROM tb_rp_gangguan ga
                 LEFT JOIN tb_rp_category cat
                 ON ga.f_tipe_id = cat.f_id 
-                
+                WHERE {wherescript}
                 """
         df = pd.read_sql(q, self.engine)
 
