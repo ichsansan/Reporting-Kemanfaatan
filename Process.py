@@ -161,9 +161,10 @@ def get_laporan_kemanfaatan(data, unit='tja'):
     datestart = pd.to_datetime(datestart)
     dateend = pd.to_datetime(dateend)
     datestart, dateend = (min(datestart, dateend), max(datestart, dateend) + pd.to_timedelta('1d') - pd.to_timedelta('1min')) 
-    ret['datestart'] = datestart.strftime("%d-%b-%Y %H:%M")
-    ret['dateend'] = dateend.strftime("%d-%b-%Y %H:%M")
-
+    ret['datestart'] = datestart.strftime("%Y-%m-%d") # datestart.strftime("%d-%b-%Y %H:%M")
+    ret['dateend'] = dateend.strftime("%Y-%m-%d") # dateend.strftime("%d-%b-%Y %H:%M")
+    ret['timestart'] = datestart.strftime("%Y-%m-%d %H:%M") # datestart.strftime("%d-%b-%Y %H:%M")
+    ret['timeend'] = dateend.strftime("%Y-%m-%d %H:%M") # dateend.strftime("%d-%b-%Y %H:%M")
     try:
         for col, DB in [['l',DB1],['y',DB2]]:
             tags = [DB.copt_enable_tag, DB.sopt_enable_tag, DB.watchdog_tag, 
@@ -186,7 +187,7 @@ def get_laporan_kemanfaatan(data, unit='tja'):
             df_gangguan_unit['Load'] = (df[DB.gross_load_tag] < 0.7*350).astype(int)
 
             ret[f'{col}11'] = df[[DB.copt_enable_tag, DB.sopt_enable_tag]].max(axis=1).sum()
-            ret[f'{col}13'] = (dateend - datestart).seconds / 60
+            ret[f'{col}13'] = (dateend - datestart).total_seconds() / 60
             ret[f'{col}15'] = df_gangguan_unit.max(axis=1).sum()
             ret[f'{col}17'] = df_gangguan_unit['Perbaikan'].sum()
             ret[f'{col}18'] = df_gangguan_unit['Safeguard'].sum()

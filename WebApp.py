@@ -32,7 +32,10 @@ def page_server_status():
 def page_laporan_kemanfaatan():
     data_requests = dict(request.args)
     if data_requests == {}:
-        home = {}
+        home = {
+            'datestart': time.strftime("%Y-%m-%d"),
+            'dateend': time.strftime("%Y-%m-%d")
+        }
     else:
         home = get_laporan_kemanfaatan(data_requests)
     print(home)
